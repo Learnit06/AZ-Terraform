@@ -5,43 +5,36 @@ pipeline {
         AZURE_CREDENTIALS = credentials('azure_service_principal') // Azure service principal credentials
     }
 
+
     stages {
-        stage('Initialize Terraform') {
+        stage('Checkout') {
             steps {
-                script {
-                    sh 'terraform init'
-                }
+                git 'https://github.com/Learnit06/AZ-Terraform.git'
             }
         }
 
-        stage('Validate Terraform') {
+        stage('Terraform Init') {
             steps {
-                script {
-                    sh 'terraform validate'
-                }
+                sh 'terraform init'
             }
         }
 
-        stage('Plan Terraform') {
+        stage('Terraform Plan') {
             steps {
-                script {
-                    sh 'terraform plan -out=tfplan'
-                }
+                sh 'terraform plan -out=tfplan -var "client_id=$AZURE_CLIENT_ID" -var "client_secret=$AZURE_CLIENT_SECRET" -var "tenant_id=$AZURE_TENANT_ID" -var "subscription_id=$AZURE_SUBSCRIPTION_ID"'
             }
         }
 
-        stage('Apply Terraform') {
+        stage('Terraform Apply') {
             steps {
-                script {
-                    sh 'terraform apply -auto-approve tfplan'
-                }
+                sh 'terraform apply -auto-approve tfplan'
             }
         }
     }
 
     post {
         always {
-            cleanWs() // Clean the workspace after the build
+            cleanWs()
         }
     }
 }
