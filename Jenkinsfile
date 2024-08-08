@@ -17,6 +17,7 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
+                sh 'terraform --version' 
                 sh 'terraform init'
             }
         }
