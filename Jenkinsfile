@@ -24,20 +24,32 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                sh 'terraform plan -out=tfplan -var "client_id=$AZURE_CLIENT_ID" -var "client_secret=$AZURE_CLIENT_SECRET" -var "tenant_id=$AZURE_TENANT_ID" -var "subscription_id=$AZURE_SUBSCRIPTION_ID"'
+                withCredentials([azureServicePrincipal(credentialsId: "${env.AZURE_CREDENTIALS_ID}", subscriptionIdVariable: 'ARM_SUBSCRIPTION_ID', clientIdVariable: 'ARM_CLIENT_ID', clientSecretVariable: 'ARM_CLIENT_SECRET', tenantIdVariable: 'ARM_TENANT_ID')]) {
+                    // Run Terraform Plan
+                    sh '''
+                    terraform plan \
+                    -var "subscription_id=$ARM_SUBSCRIPTION_ID" \
+                    -var "client_id=$ARM_CLIENT_ID" \
+                    -var "client_secret=$ARM_CLIENT_SECRET" \
+                    -var "tenant_id=$ARM_TENANT_ID"
+                    '''
+                }
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                sh 'terraform apply -auto-approve tfplan'
+                withCredentials([azureServicePrincipal(credentialsId: "${env.AZURE_CREDENTIALS_ID}", subscriptionIdVariable: 'ARM_SUBSCRIPTION_ID', clientIdVariable: 'ARM_CLIENT_ID', clientSecretVariable: 'ARM_CLIENT_SECRET', tenantIdVariable: 'ARM_TENANT_ID')]) {
+                    // Apply Terraform changes
+                    sh '''
+                    terraform apply -auto-approve \
+                    -var "subscription_id=$ARM_SUBSCRIPTION_ID" \
+                    -var "client_id=$ARM_CLIENT_ID" \
+                    -var "client_secret=$ARM_CLIENT_SECRET" \
+                    -var "tenant_id=$ARM_TENANT_ID"
+                    '''
+                }
             }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
         }
     }
 }
