@@ -24,7 +24,7 @@ resource "azurerm_resource_group" "rg1" {
   
 }
 
-resource "azure_virtual_network" "example" {
+resource "azurerm_virtual_network" "example" {
     name = "${var.vnet_name}"
     address_space = "${var.vnet_address_space}"
     location =  azurerm_resource_group.rg1.location
