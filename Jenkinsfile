@@ -10,6 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/Learnit06/AZ-Terraform.git', credentialsId: 'Github'
+                sh 'ls' // Verify Git checkout
 
             }
         }
