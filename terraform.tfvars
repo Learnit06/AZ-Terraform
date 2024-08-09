@@ -1,7 +1,7 @@
 rgname = "varesh"
 rglocation = "eastus"
 vnet_name = "varesh_vnet"
-vnet_address_space = [ " " ]
+vnet_address_space = ["10.0.0.0/16"]
 subnet_name = "sunny_sbunet"
 subnet_address_prefix = [ " " ]
 subscription_id = "ecb756c6-dacc-42f6-96e3-ec8ed8ea07af"
