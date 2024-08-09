@@ -35,3 +35,19 @@ variable "subnet_address_prefix" {
     default = [ "10.0.1.0/24" ]
   
 }
+
+variable "client_id" {
+  type = string
+}
+
+variable "client_secret" {
+  type = string
+}
+
+variable "tenant_id" {
+  type = string
+}
+
+variable "subscription_id" {
+  type = string
+}
