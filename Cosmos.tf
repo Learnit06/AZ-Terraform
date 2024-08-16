@@ -10,6 +10,10 @@
 
 module "Cosmo" {
     source = "./module_sql"
+    client_id = var.client_id
+    client_secret = var.client_secret
+    subscription_id = var.subscription_id
+    tenant_id = var.tenant_id
     rglocation = "EastUS"
     rgname = "CosmoGRP"
     storage_account_name = "cosmostorage"
@@ -19,3 +23,4 @@ module "Cosmo" {
     db_name = "Cosmosdb1"
   
 }
+
